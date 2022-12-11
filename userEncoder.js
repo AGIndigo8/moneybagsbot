@@ -1,10 +1,7 @@
+const newCitizen = require("./user.js").newCitizen;
 
-const displayFeature = require("./displayFeature.js").displayFeature;
-const newPurse = require("./purse.js").newPurse;
-const newUser = require("./user.js").newUser;
-
-function encodeUser(user){
-    const features = getFeatures(user);
+function encodeCitizen(citizen){
+    const features = getFeatures(citizen);
     encoding = "";
     // We are going to store each feature as 3 characters, so we need to pad the encoding with 0s
     for (let i = 0; i < features.length; i++){
@@ -13,18 +10,18 @@ function encodeUser(user){
     return encoding;
 }
 
-function decodeUser(userObj, encoding){
-    const user = newUser(userObj);
-    const features = getFeatures(user);
+function decodeCitizen(discordUser, encoding){
+    const citizen = newCitizen(discordUser);
+    const features = getFeatures(citizen);
     for (let i = 0; i < features.length; i++){
         features[i].value = parseInt(encoding.slice(i*3, i*3+3), 36);
     }
-    return user;
+    return citizen;
 }
 
-function getFeatures(user){
-    const purse = user.purse.raw;
-    const profile = user.profile;
+function getFeatures(citizen){
+    const purse = citizen.purse.raw;
+    const profile = citizen.profile;
     features= [
         profile.level,
         profile.lives,
@@ -42,5 +39,5 @@ function getFeatures(user){
     return features;
 }
 
-exports.encodeUser = encodeUser;
-exports.decodeUser = decodeUser;
+exports.encodeCitizen = encodeCitizen;
+exports.decodeCitizen = decodeCitizen;

@@ -1,53 +1,47 @@
-const decodeUser = require("./userEncoder.js").decodeUser;
-const encodeUser = require("./userEncoder.js").encodeUser;
-const newUser = require("./user.js").newUser;
+const decodeCitizen = require("./userEncoder.js").decodeCitizen;
+const encodeCitizen = require("./userEncoder.js").encodeCitizen;
+const newCitizen = require("./user.js").newCitizen;
 
 function getDataChannelActions(bot){
-    dataChannelActions = {
-        getUserData: async (msg) => await getUserData(msg, bot),
-        setUserData: async (msg, userData) => await setUserData(msg, userData),
+    const dataChannelActions = {
+        getAuthorAsCitizen: async (msg) => await getAuthorAsCitizen(msg, bot),
+        saveCitizen: async (msg, citizen) => await saveCitizen(msg, citizen),
     }
     return dataChannelActions;
 }
 
-async function getUserData(msg, bot){
-    const user = msg.author;
+async function getAuthorAsCitizen(msg, bot){
+    const discordUser = msg.author;
     const dataChannel = getDataChannel(msg);
-    const userPost = await findUserPost(user, dataChannel);
-    if(!userPost){
-        const userData = newUser(user);
-        setUserData(msg, userData);
-        return userData;
+    const citizenPost = await findCitizenPost(discordUser, dataChannel);
+    if(!citizenPost){
+        const citizen = newCitizen(discordUser);
+        setUserData(msg, citizen);
+        return citizen;
     }
-    const userEncoding = userPost.content.split(' ')[1];
-    const userData = decodeUser(user, userEncoding);
-    return userData;
+    const citizenEncoding = citizenPost.content.split(' ')[1];
+    const citizen = decodeCitizen(discordUser, citizenEncoding);
+    return citizen;
 }
 
-async function setUserData(msg, userData){
-    const user = msg.author;
+async function saveCitizen(msg, citizen){
+    const discordUser = msg.author;
     const dataChannel = getDataChannel(msg);
-    const userPost = await findUserPost(user, dataChannel);
-    const userEncoding = encodeUser(userData);
-    if(!userPost){
-        dataChannel.createMessage(user.username + user.discriminator + ' ' + userEncoding);
+    const citizenPost = await findCitizenPost(discordUser, dataChannel);
+    const citizenEncoding = encodeCitizen(citizen);
+    if(!citizenPost){
+        dataChannel.createMessage(discordUser.username + discordUser.discriminator + ' ' + citizenEncoding);
     } else {
-        await userPost.edit(user.username + user.discriminator + ' ' + userEncoding);
+        await citizenPost.edit(discordUser.username + discordUser.discriminator + ' ' + citizenEncoding);
     }
 }
 
-function getUser(discriminator, client){
-    const users = client.users;
-    const user = users.find(user => user.discriminator === discriminator);
-    return user;
-}
-
-async function findUserPost(user, dataChannel){
+async function findCitizenPost(discordUser, dataChannel){
     const posts = await dataChannel.getMessages();
-    let prefix = user.username + user.discriminator;
-    const userPost = posts.find(post => post.content.startsWith(prefix));
+    let prefix = discordUser.username + discordUser.discriminator;
+    const citizenPost = posts.find(post => post.content.startsWith(prefix));
 
-    return userPost;
+    return citizenPost;
 }
 
 function getDataChannel(msg){
