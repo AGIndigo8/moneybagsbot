@@ -1,32 +1,13 @@
 const displayFeature = require("./displayFeature.js").displayFeature;
 const newPurse = require("./purse.js").newPurse;
 
-function getUsers(){
-    const users = {};
-
-    return {
-        users, 
-        addUser: (name) => addUser(name, users),
-    };
-    
-}
-
-function newUser(userObj){
-    const user = {
-        userObj: userObj,
+function newCitizen(user){
+    const citizen = {
+        user: user,
         purse: newPurse(),
-        profile: playerProfile(userObj.username),
+        profile: playerProfile(user.username),
     }
-    return user;
-}
-
-function addUser(name, users){
-    user = {
-        name: name,
-        purse: newPurse(),
-        profile: playerProfile(name),
-    }
-    users[name] = user;
+    return citizen;
 }
 
 function playerProfile(name){
@@ -41,5 +22,4 @@ function playerProfile(name){
     return profile;
 }
 
-exports.getUsers = getUsers;
-exports.newUser = newUser;
+exports.newCitizen = newCitizen;

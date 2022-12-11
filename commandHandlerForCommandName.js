@@ -1,8 +1,5 @@
-const Users = require('./user.js');
-const {users, addUser} = Users.getUsers();
-
 function getCommandHandler(bot){
-    const {getUserData, setUserData} = require('./datachannel.js').getDataChannelActions(bot);
+    const {getAuthorAsCitizen, saveCitizen} = require('./datachannel.js').getDataChannelActions(bot);
 
     const commandHandlerForCommandName = {};
 
@@ -13,14 +10,14 @@ function getCommandHandler(bot){
     };
 
     commandHandlerForCommandName['balance'] = async (msg, args) => {
-        const user = await getUserData(msg); 
+        const citizen = await getAuthorAsCitizen(msg); 
         let mess = 'You have the following in your account:\n';
-        mess += generateBalance(user);
+        mess += generateBalance(citizen);
         return msg.channel.createMessage(mess);
     };
 
-    function generateBalance(user){
-        const purse = user.purse.raw;
+    function generateBalance(citizen){
+        const purse = citizen.purse.raw;
         let output = '';
         for (const feature in purse){
             output += `${purse[feature].name}: ${purse[feature].value}\n`;
@@ -45,9 +42,9 @@ function getCommandHandler(bot){
             author: mention,
             channel: msg.channel,
         }
-        const recipient = await getUserData(getUserBundle);
+        const recipient = await getAuthorAsCitizen(getUserBundle);
         recipient.purse.raw[currency].value += amount;
-        await setUserData(getUserBundle, recipient);
+        await saveCitizen(getUserBundle, recipient);
         return msg.channel.createMessage(`Okay, ${name}! You got it! ${mention.username} now has ${amount} ${currency}!`);
     };
 
