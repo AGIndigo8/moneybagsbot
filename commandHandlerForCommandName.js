@@ -1,5 +1,5 @@
 function getCommandHandler(bot){
-    const {getAuthorAsCitizen, saveCitizen} = require('./datachannel.js').getDataChannelActions(bot);
+    const {getAuthorAsCitizen, saveCitizen} = require('./data/datachannel.js').getDataChannelActions(bot);
 
     const commandHandlerForCommandName = {};
 

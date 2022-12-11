@@ -1,6 +1,6 @@
 const decodeCitizen = require("./userEncoder.js").decodeCitizen;
 const encodeCitizen = require("./userEncoder.js").encodeCitizen;
-const newCitizen = require("./user.js").newCitizen;
+const newCitizen = require("../userEconomy/user.js").newCitizen;
 
 function getDataChannelActions(bot){
     const dataChannelActions = {
