@@ -1,4 +1,4 @@
-const newCitizen = require("./user.js").newCitizen;
+const newCitizen = require("../userEconomy/user.js").newCitizen;
 
 function encodeCitizen(citizen){
     const features = getFeatures(citizen);
