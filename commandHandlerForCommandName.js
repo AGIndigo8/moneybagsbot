@@ -12,18 +12,9 @@ function getCommandHandler(bot){
     commandHandlerForCommandName['balance'] = async (msg, args) => {
         const citizen = await getAuthorAsCitizen(msg); 
         let mess = 'You have the following in your account:\n';
-        mess += generateBalance(citizen);
+        mess += citizen.purse.getDisplayString();
         return msg.channel.createMessage(mess);
     };
-
-    function generateBalance(citizen){
-        const purse = citizen.purse.raw;
-        let output = '';
-        for (const feature in purse){
-            output += `${purse[feature].name}: ${purse[feature].value}\n`;
-        }
-        return output;
-    }
 
     commandHandlerForCommandName['grant'] = async (msg, args) => {
         const author = msg.member;
@@ -43,7 +34,10 @@ function getCommandHandler(bot){
             channel: msg.channel,
         }
         const recipient = await getAuthorAsCitizen(getUserBundle);
-        recipient.purse.raw[currency].value += amount;
+        let change = recipient.purse.addToElement(amount, currency);
+        if (change){
+            return msg.channel.createMessage(`Sorry, ${name}! I couldn't give ${mention.username} ${amount} ${currency} because they don't have enough space in their purse!. There is ${change} ${currency} left over.`);
+        }
         await saveCitizen(getUserBundle, recipient);
         return msg.channel.createMessage(`Okay, ${name}! You got it! ${mention.username} now has ${amount} ${currency}!`);
     };
