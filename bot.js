@@ -1,6 +1,5 @@
 const eris = require('eris');
 // Read the token from the environment variables using the dotenv package.
-require('dotenv').config();
 const token = process.env.TOKEN;
 const bot = new eris.Client(token);
 
