@@ -11,12 +11,13 @@ function newCitizen(user){
 }
 
 function playerProfile(name){
+    const HP = displayFeature("HP", 10);
+    HP.setMax(10);
     profile = {
         name: displayFeature("Name", name),
         level: displayFeature("Level", 1),
         lives: displayFeature("Lives", 3), 
-        HP: displayFeature("HP", 10),
-        maxHP: displayFeature("Max HP", 10),
+        HP: HP,
         exp: displayFeature("Exp", 0),
     }
     return profile;

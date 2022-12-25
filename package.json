@@ -16,5 +16,8 @@
     "url": "https://github.com/AGIndigo8/moneybagsbot/issues"
   },
   "homepage": "https://github.com/AGIndigo8/moneybagsbot#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  }
 }
